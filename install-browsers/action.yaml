@@ -47,12 +47,12 @@ runs:
       run: |
         if [ -n "${{ inputs.playwright-version }}" ]
         then
-          python3.10 -m pip install playwright==${{inputs.playwright-version}}
+          ${{ inputs.python-executable }} -m pip install playwright==${{inputs.playwright-version}}
         else
-          python3.10 -m pip install playwright
+          ${{ inputs.python-executable }} -m pip install playwright
         fi
         # TODO: install only browsers that are required
-        python3.10 -m playwright install --with-deps
+        ${{ inputs.python-executable }} -m playwright install --with-deps
     - name: Install firefox
       uses: browser-actions/setup-firefox@latest
       if: ${{ inputs.runner == 'selenium' && contains(inputs.browser, 'firefox') }}

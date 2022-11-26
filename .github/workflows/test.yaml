@@ -64,7 +64,6 @@ jobs:
           browser: ${{ matrix.test-config.browser }}
           browser-version: ${{ matrix.test-config.browser-version }}
           driver-version: ${{ matrix.test-config.driver-version }}
-          python-executable: python3.10
       - name: Check installation
         shell: bash
         run: |
