@@ -4,7 +4,7 @@ Github Actions snippets for Pyodide
 
 ## Usage
 
-### `install-browsers`
+### `install-browser`
 
 ```yaml
 ...
@@ -13,7 +13,7 @@ steps:
     - uses: actions/setup-python@v3
     with:
         python-version: "3.10"
-    - uses: pyodide/pyodide-actions/install-browsers
+    - uses: pyodide/pyodide-actions/install-browser
     with:
         runner: selenium
         browser: chrome

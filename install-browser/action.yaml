@@ -1,5 +1,5 @@
-name: "Install browsers"
-description: "Install browsers to run Pyodide tests"
+name: "Install browser"
+description: "Install a browser to run Pyodide tests"
 inputs:
   runner:
     required: false
