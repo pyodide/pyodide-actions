@@ -66,6 +66,11 @@ jobs:
           browser-version: ${{ matrix.test-config.browser-version }}
           driver-version: ${{ matrix.test-config.driver-version }}
           python-executable: python3.10
+      - name: Check installation
+        shell: bash
+        run: |
+          python3.10 install-browsers/test_installation.py | tee result.log
+          grep "${{ matrix.test-config.runner }}/${{ matrix.test-config.browser }}" result.log
   lint:
     runs-on: ubuntu-latest
     steps:
