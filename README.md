@@ -28,3 +28,21 @@ steps:
 - `driver-version` - webdriver version, only for `selenium` runner
 - `playwright-version` - specify playwright version, only for `playwright` runner
 - `python-executable` - path to python executable, default is `python`
+
+
+### `download-pyodide`
+
+```yaml
+...
+steps:
+    - uses: actions/checkout@v3
+    - uses: pyodide/pyodide-actions/download-pyodide
+    with:
+        version: 0.21.0
+        to: dist
+```
+
+### Inputs
+
+- `version` - Pyodide version, e.g. `0.21.0`
+- `to` - path to download Pyodide
