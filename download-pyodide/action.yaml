@@ -33,7 +33,7 @@ runs:
           PYODIDE_RELEASE_NAME="pyodide"
         fi
 
-        echo "url=https://github.com/pyodide/pyoide/releases/download/${{ inputs.version }}/$PYODIDE_RELEASE_NAME-${{ inputs.version }}.tar.bz2" >> $GITHUB_OUTPUT
+        echo "url=https://github.com/pyodide/pyodide/releases/download/${{ inputs.version }}/$PYODIDE_RELEASE_NAME-${{ inputs.version }}.tar.bz2" >> $GITHUB_OUTPUT
 
     - name: Download Pyodide
       shell: bash
