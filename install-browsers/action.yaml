@@ -5,10 +5,6 @@ inputs:
     required: false
     type: string
     default: "selenium"
-  playwright-version:
-    required: false
-    type: string
-    default: ""
   browser:
     required: false
     type: string
@@ -21,6 +17,10 @@ inputs:
     required: false
     type: string
     default: "latest"
+  playwright-version:
+    required: false
+    type: string
+    default: ""
   python-executable:
     required: false
     type: string
