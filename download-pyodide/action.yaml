@@ -41,4 +41,8 @@ runs:
       run: |
         wget -q ${{ steps.get-download-link.outputs.url }} -O pyodide.tar.bz2
         tar xjf pyodide.tar.bz2
-        mv pyodide ${{ inputs.to }}
+
+        if [ "${{ inputs.to }}" != "pyodide" ]
+        then
+          mv pyodide ${{ inputs.to }}
+        fi
