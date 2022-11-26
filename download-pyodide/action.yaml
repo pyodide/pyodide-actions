@@ -1,0 +1,43 @@
+name: "Download Pyodide"
+description: "Download Pyodide into a given directory"
+inputs:
+  version:
+    required: true
+    type: string
+  to:
+    required: true
+    type: string
+runs:
+  using: "composite"
+  steps:
+    - name: Cache Pyodide
+      uses: actions/cache@v3
+      id: cache-pyodide
+      with:
+        path: ${{ inputs.to }}
+        key: pyodide-${{ inputs.version }}
+
+    - name: Get Pyodide download link
+      id: get-download-link
+      if: steps.cache-pyodide.outputs.cache-hit != 'true'
+      run: |
+        PYODIDE_MAJOR=$(echo "${{ inputs.version }}" | cut -d. -f1)
+        PYODIDE_MINOR=$(echo "${{ inputs.version }}" | cut -d. -f2)
+
+        # Starting from Pyodide 0.22, we changed the release name from pyodide-build to pyodide.
+        if [ "$PYODIDE_MAJOR" -eq 0 ] && [ "$PYODIDE_MINOR" -lt 22 ]
+        then
+          PYODIDE_RELEASE_NAME="pyodide-build"
+        else
+          PYODIDE_RELEASE_NAME="pyodide"
+        fi
+
+        echo "url=https://github.com/pyodide/pyoide/releases/download/${{ inputs.version }}/$PYODIDE_RELEASE_NAME-${{ inputs.version }}.tar.bz2" >> $GITHUB_OUTPUT
+
+    - name: Download Pyodide
+      shell: bash
+      if: steps.cache-pyodide.outputs.cache-hit != 'true'
+      run: |
+        wget -q ${{ steps.get-download-link.outputs.url }} -O pyodide.tar.bz2
+        tar xjf pyodide.tar.bz2
+        mv pyodide ${{ inputs.to }}

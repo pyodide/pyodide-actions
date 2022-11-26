@@ -69,6 +69,28 @@ jobs:
         run: |
           python3.10 install-browser/test_installation.py | tee result.log
           grep "${{ matrix.test-config.runner }}/${{ matrix.test-config.browser }}" result.log
+  download-pyodide:
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [0.21.0, 0.21.3, 0.22.0a3]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      - uses: ./download-pyodide
+        with:
+          pyodide-version: ${{ matrix.version }}
+          to: pyodide
+      - name: Check download
+        shell: bash
+        run: |
+          ls pyodide | tee result.log
+          grep -q "pyodide.js" result.log
+          grep -q "pyodide.asm.js" result.log
+          grep -q "pyodide.asm.wasm" result.log
   lint:
     runs-on: ubuntu-latest
     steps:
