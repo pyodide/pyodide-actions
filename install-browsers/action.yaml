@@ -1,10 +1,6 @@
 name: "Install browsers"
 description: "Install browsers to run Pyodide tests"
 inputs:
-  os:
-    required: false
-    type: string
-    default: "ubuntu-latest"
   runner:
     required: false
     type: string
