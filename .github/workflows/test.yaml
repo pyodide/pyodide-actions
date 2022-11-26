@@ -82,7 +82,7 @@ jobs:
           python-version: "3.10"
       - uses: ./download-pyodide
         with:
-          pyodide-version: ${{ matrix.version }}
+          version: ${{ matrix.version }}
           to: pyodide
       - name: Check download
         shell: bash
