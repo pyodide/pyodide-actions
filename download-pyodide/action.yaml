@@ -20,6 +20,7 @@ runs:
     - name: Get Pyodide download link
       id: get-download-link
       if: steps.cache-pyodide.outputs.cache-hit != 'true'
+      shell: bash
       run: |
         PYODIDE_MAJOR=$(echo "${{ inputs.version }}" | cut -d. -f1)
         PYODIDE_MINOR=$(echo "${{ inputs.version }}" | cut -d. -f2)
