@@ -1,0 +1,77 @@
+name: test
+
+on:
+  push:
+  pull_request:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  install-browers:
+    runs-on: ${{ matrix.test-config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        test-config: [
+          {
+            os: "ubuntu-latest",
+            runner: "selenium",
+            browser: "chrome",
+            browser-version: "latest",
+            driver-version: "latest",
+          },
+          {
+            os: "ubuntu-latest",
+            runner: "selenium",
+            browser: "firefox",
+            browser-version: "latest",
+            driver-version: "latest",
+          },
+          {
+            os: "ubuntu-latest",
+            runner: "selenium",
+            browser: "node",
+            browser-version: "18",
+          },
+          {
+            os: "macos-latest",
+            runner: "selenium",
+            browser: "safari",
+          },
+          {
+            os: "ubuntu-latest",
+            runner: "playwright",
+            browser: "chrome",
+          },
+          {
+            os: "ubuntu-latest",
+            runner: "playwright",
+            browser: "firefox",
+          },
+        ]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      - uses: ./install-browser
+        with:
+          runner: ${{ matrix.test-config.runner }}
+          playwright-version: ${{ matrix.test-config.playwright-version }}
+          browser: ${{ matrix.test-config.browser }}
+          browser-version: ${{ matrix.test-config.browser-version }}
+          driver-version: ${{ matrix.test-config.driver-version }}
+      - name: Check installation
+        shell: bash
+        run: |
+          python3.10 install-browser/test_installation.py | tee result.log
+          grep "${{ matrix.test-config.runner }}/${{ matrix.test-config.browser }}" result.log
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - uses: pre-commit/action@v3.0.0
