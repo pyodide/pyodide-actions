@@ -67,7 +67,7 @@ jobs:
       - name: Check installation
         shell: bash
         run: |
-          python3.10 install-browser/test_installation.py | tee result.log
+          python install-browser/test_installation.py | tee result.log
           grep "${{ matrix.test-config.runner }}/${{ matrix.test-config.browser }}" result.log
   download-pyodide:
     strategy:
