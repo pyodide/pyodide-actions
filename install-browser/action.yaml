@@ -25,6 +25,11 @@ inputs:
     required: false
     type: string
     default: "python"
+  github-token:
+    description: "Github token to download drivers from Github releases"
+    type: string
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -64,7 +69,7 @@ runs:
       if: ${{ inputs.runner == 'selenium' && contains(inputs.browser, 'firefox') }}
       with:
         geckodriver-version: ${{ inputs.driver-version }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.github-token }}
 
     - name: Install chrome
       uses: browser-actions/setup-chrome@latest
