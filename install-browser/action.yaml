@@ -64,6 +64,7 @@ runs:
       if: ${{ inputs.runner == 'selenium' && contains(inputs.browser, 'firefox') }}
       with:
         geckodriver-version: ${{ inputs.driver-version }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install chrome
       uses: browser-actions/setup-chrome@latest
