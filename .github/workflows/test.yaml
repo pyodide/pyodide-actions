@@ -64,6 +64,7 @@ jobs:
           browser: ${{ matrix.test-config.browser }}
           browser-version: ${{ matrix.test-config.browser-version }}
           driver-version: ${{ matrix.test-config.driver-version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Check installation
         shell: bash
         run: |
