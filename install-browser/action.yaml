@@ -79,7 +79,7 @@ runs:
 
     - name: Install chromedriver
       if: ${{ inputs.runner == 'selenium' && contains(inputs.browser, 'chrome') }}
-      uses: nanasess/setup-chromedriver@v1
+      uses: nanasess/setup-chromedriver@v2
 
     - name: Enable Safari Driver
       shell: bash -l {0}
