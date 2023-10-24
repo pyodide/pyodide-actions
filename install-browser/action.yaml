@@ -37,7 +37,7 @@ runs:
       uses: actions/setup-node@v3
       if: ${{ contains(inputs.browser, 'node') || inputs.runner == 'playwright' }}
       with:
-        node-version: ${{ inputs.driver-version }}
+        node-version: ${{ inputs.browser-version }}
 
     - name: Cache Playwright browsers
       uses: actions/cache@v3
