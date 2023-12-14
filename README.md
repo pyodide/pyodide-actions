@@ -11,10 +11,10 @@ Github Actions snippets for Pyodide
 steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v3
-    with:
+      with:
         python-version: "3.10"
     - uses: pyodide/pyodide-actions/install-browser
-    with:
+      with:
         runner: selenium
         browser: chrome
         browser-version: latest
@@ -37,7 +37,7 @@ steps:
 steps:
     - uses: actions/checkout@v3
     - uses: pyodide/pyodide-actions/download-pyodide
-    with:
+      with:
         version: 0.21.0
         to: dist
 ```
