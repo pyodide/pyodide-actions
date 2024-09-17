@@ -85,8 +85,8 @@ runs:
       run: |
         sudo rm -f /usr/bin/google-chrome
         sudo rm -f /usr/bin/chromedriver
-        sudo ln -s ${{ steps.setup-chrome.outputs.chrome-path }} /usr/bin/google-chrome
-        sudo ln -s ${{ steps.setup-chrome.outputs.chromedriver-path }} /usr/bin/chromedriver
+        sudo ln -s ${{ steps.chrome.outputs.chrome-path }} /usr/bin/google-chrome
+        sudo ln -s ${{ steps.chrome.outputs.chromedriver-path }} /usr/bin/chromedriver
 
     - name: Enable Safari Driver
       shell: bash -l {0}
