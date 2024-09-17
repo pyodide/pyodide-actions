@@ -72,11 +72,21 @@ runs:
         token: ${{ inputs.github-token }}
 
     - name: Install chrome
+      id: chrome
       uses: browser-actions/setup-chrome@latest
       if: ${{ inputs.runner == 'selenium' && contains(inputs.browser, 'chrome') }}
       with:
         chrome-version: ${{ inputs.browser-version }}
         install-chromedriver: true
+
+    - name: Overwrite system Chrome and ChromeDriver
+      shell: bash -l {0}
+      if: ${{ inputs.runner == 'selenium' && contains(inputs.browser, 'chrome') }}
+      run: |
+        sudo rm -f /usr/bin/google-chrome
+        sudo rm -f /usr/bin/chromedriver
+        sudo ln -s ${{ steps.chrome.outputs.chrome-path }} /usr/bin/google-chrome
+        sudo ln -s ${{ steps.chrome.outputs.chromedriver-path }} /usr/bin/chromedriver
 
     - name: Enable Safari Driver
       shell: bash -l {0}
