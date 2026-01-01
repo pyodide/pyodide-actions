@@ -11,7 +11,7 @@ runs:
   using: "composite"
   steps:
     - name: Cache Pyodide
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cache-pyodide
       with:
         path: ${{ inputs.to }}
