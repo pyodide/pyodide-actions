@@ -2,28 +2,66 @@ name: "Download Pyodide"
 description: "Download Pyodide into a given directory"
 inputs:
   version:
-    required: true
+    description: "Pyodide version, e.g. 0.21.0. Mutually exclusive with python_version."
+    required: false
     type: string
+    default: ""
+  python_version:
+    description: "Python version bundled by Pyodide, e.g. 3.11 or 3.11.3. Resolves to the latest matching Pyodide release. Mutually exclusive with version."
+    required: false
+    type: string
+    default: ""
   to:
     required: true
     type: string
 runs:
   using: "composite"
   steps:
+    - name: Validate inputs
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.version }}" ] && [ -z "${{ inputs.python_version }}" ]
+        then
+          echo "::error::Either 'version' or 'python_version' input must be provided"
+          exit 1
+        fi
+
+        if [ -n "${{ inputs.version }}" ] && [ -n "${{ inputs.python_version }}" ]
+        then
+          echo "::error::Only one of 'version' or 'python_version' inputs can be provided"
+          exit 1
+        fi
+
+    - name: Resolve Pyodide version from Python version
+      id: resolve-python-version
+      if: inputs.python_version != ''
+      shell: bash
+      run: |
+        RESOLVED_VERSION=$(python3 "${{ github.action_path }}/resolve_pyodide_version.py" "${{ inputs.python_version }}")
+        echo "Resolved Pyodide version $RESOLVED_VERSION for Python version ${{ inputs.python_version }}"
+        echo "version=$RESOLVED_VERSION" >> "$GITHUB_OUTPUT"
+
+    - name: Determine Pyodide version
+      id: determine-version
+      shell: bash
+      run: |
+        echo "version=${{ steps.resolve-python-version.outputs.version || inputs.version }}" >> "$GITHUB_OUTPUT"
+
     - name: Cache Pyodide
       uses: actions/cache@v5
       id: cache-pyodide
       with:
         path: ${{ inputs.to }}
-        key: pyodide-${{ inputs.version }}
+        key: pyodide-${{ steps.determine-version.outputs.version }}
 
     - name: Get Pyodide download link
       id: get-download-link
       if: steps.cache-pyodide.outputs.cache-hit != 'true'
       shell: bash
       run: |
-        PYODIDE_MAJOR=$(echo "${{ inputs.version }}" | cut -d. -f1)
-        PYODIDE_MINOR=$(echo "${{ inputs.version }}" | cut -d. -f2)
+        PYODIDE_VERSION="${{ steps.determine-version.outputs.version }}"
+        PYODIDE_MAJOR=$(echo "$PYODIDE_VERSION" | cut -d. -f1)
+        PYODIDE_MINOR=$(echo "$PYODIDE_VERSION" | cut -d. -f2)
 
         # Starting from Pyodide 0.22, we changed the release name from pyodide-build to pyodide.
         if [ "$PYODIDE_MAJOR" -eq 0 ] && [ "$PYODIDE_MINOR" -lt 22 ]
@@ -33,7 +71,7 @@ runs:
           PYODIDE_RELEASE_NAME="pyodide"
         fi
 
-        echo "url=https://github.com/pyodide/pyodide/releases/download/${{ inputs.version }}/$PYODIDE_RELEASE_NAME-${{ inputs.version }}.tar.bz2" >> $GITHUB_OUTPUT
+        echo "url=https://github.com/pyodide/pyodide/releases/download/$PYODIDE_VERSION/$PYODIDE_RELEASE_NAME-$PYODIDE_VERSION.tar.bz2" >> $GITHUB_OUTPUT
 
     - name: Download Pyodide
       shell: bash

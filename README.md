@@ -42,7 +42,21 @@ steps:
         to: dist
 ```
 
+You can also pick the latest Pyodide release that bundles a given Python
+version, instead of specifying an exact Pyodide version:
+
+```yaml
+...
+steps:
+    - uses: actions/checkout@v3
+    - uses: pyodide/pyodide-actions/download-pyodide
+      with:
+        python_version: "3.11"
+        to: dist
+```
+
 ### Inputs
 
-- `version` - Pyodide version, e.g. `0.21.0`
+- `version` - Pyodide version, e.g. `0.21.0`. Mutually exclusive with `python_version`.
+- `python_version` - Python version bundled by Pyodide, e.g. `3.11` or `3.11.3`. Resolves to the latest matching Pyodide release. Mutually exclusive with `version`.
 - `to` - path to download Pyodide
