@@ -92,6 +92,28 @@ jobs:
           grep -q "pyodide.js" result.log
           grep -q "pyodide.asm.js" result.log
           grep -q "pyodide.asm.wasm" result.log
+  download-pyodide-by-python-version:
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version: ["3.11", "3.12", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: ./download-pyodide
+        with:
+          python_version: ${{ matrix.python_version }}
+          to: pyodide
+      - name: Check download
+        shell: bash
+        run: |
+          ls pyodide | tee result.log
+          grep -q "pyodide.js" result.log
+          grep -q "pyodide.asm.js" result.log
+          grep -q "pyodide.asm.wasm" result.log
   lint:
     runs-on: ubuntu-latest
     steps:
