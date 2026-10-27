@@ -34,13 +34,13 @@ runs:
   using: "composite"
   steps:
     - name: Install node
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
       if: ${{ contains(inputs.browser, 'node') || inputs.runner == 'playwright' }}
       with:
         node-version: ${{ inputs.browser-version }}
 
     - name: Cache Playwright browsers
-      uses: actions/cache@v5
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       if: ${{ inputs.runner == 'playwright' }}
       with:
         path: .cache/ms-playwright
@@ -59,13 +59,13 @@ runs:
         # TODO: install only browsers that are required
         ${{ inputs.python-executable }} -m playwright install --with-deps
     - name: Install firefox
-      uses: browser-actions/setup-firefox@latest
+      uses: browser-actions/setup-firefox@0bc507ddf224827e3b1af68e014d5e42ab93e795 # v1.7.2
       if: ${{ inputs.runner == 'selenium' && contains(inputs.browser, 'firefox') }}
       with:
         firefox-version: ${{ inputs.browser-version }}
 
     - name: Install geckodriver
-      uses: browser-actions/setup-geckodriver@latest
+      uses: browser-actions/setup-geckodriver@fac5b0424c584257f32cf12c5eb4ba86014c34f8 # latest
       if: ${{ inputs.runner == 'selenium' && contains(inputs.browser, 'firefox') }}
       with:
         geckodriver-version: ${{ inputs.driver-version }}
@@ -73,7 +73,7 @@ runs:
 
     - name: Install chrome
       id: chrome
-      uses: browser-actions/setup-chrome@latest
+      uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2.2.0
       if: ${{ inputs.runner == 'selenium' && contains(inputs.browser, 'chrome') }}
       with:
         chrome-version: ${{ inputs.browser-version }}
